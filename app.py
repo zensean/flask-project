@@ -29,6 +29,20 @@ def getData():
 def getUser(name):
     return "Hello "+name
 
+@app.route("/getSum")
+def getSum(): #sum of m to n
+    maxNumber=request.args.get("n", 100)
+    maxNumber=int(maxNumber)
+    minNumber=request.args.get("m", 1)
+    minNumber=int(minNumber)
+
+    result=0
+    for n in range(minNumber, maxNumber+1):
+        result += n
+
+    return "結果："+str(result)
+
+
 
 #啟動網站伺服器
 app.run(port=3000)

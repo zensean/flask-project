@@ -35,11 +35,17 @@ def getSum(): #sum of m to n
     maxNumber=int(maxNumber)
     minNumber=request.args.get("m", 1)
     minNumber=int(minNumber)
-
     result=0
-    for n in range(minNumber, maxNumber+1):
-        result += n
 
+    #時間複雜度O(n) 的運算
+    # for n in range(minNumber, maxNumber+1):
+    #     result += n
+
+    #時間複雜度O(1) 的運算
+    n=maxNumber # 最大值 n
+    m=minNumber # 最小值 m
+    m=m-1 # 為了減去m(最小值)以下的所有等差級數之合 m本身是需要的值
+    result = int((n+1)*n/2-(m+1)*m/2)
     return "結果："+str(result)
 
 

@@ -1,6 +1,10 @@
 from flask import Flask     # 載入 Flask
 from flask import request   # 載入 Request 物件
-app=Flask(__name__) # 建立 Application 物件
+from flask import redirect  # 載入 Redirect 函式
+from flask import render_template # 載入 render_template 函式
+import json
+# 建立 Application 物件, 設定靜態檔案的資料夾名稱及路徑, 設定為預設值
+app=Flask(__name__, static_folder="static", static_url_path="/static") 
 
 #建立路徑 / 對應的處理函式
 @app.route("/")
@@ -15,9 +19,28 @@ def index(): # 用來回應路徑 / 的處理函式
     # print("引薦網址", request.headers.get("referrer"))
     lang=request.headers.get("accept-language")
     if lang.startswith("zh"):
-        return "妳好,歡迎光臨"
+        return redirect("/zh") #導向到路徑 /zh
     else:
-        return "Hello Flask"
+        return "<h2>hello</h2>"+ render_template("home.html")
+
+@app.route("/zh")
+def zh():
+    return "我真的好累~, 你要的我都學不會"+render_template("index.html")
+
+@app.route("/firstWeb")
+def firstWeb():
+    return render_template("index.html")
+
+@app.route("/page")
+def page():
+    return render_template("page.html")
+
+@app.route("/jsonDumps")
+def jsonDumps():
+    return json.dumps({
+        "status":"OK",
+        "text":"dumps dumps"+"我真的好累~"
+    }, ensure_ascii=False) #指示不要用ASCII 編碼處理中文
 
 #建立路徑 /data 對應的處理函式
 @app.route("/data")

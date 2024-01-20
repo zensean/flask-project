@@ -23,9 +23,14 @@ def index(): # 用來回應路徑 / 的處理函式
     else:
         return "<h2>hello</h2>"+ render_template("home.html")
 
+@app.route("/showName")
+def show():
+    name=request.args.get("n", "")
+    return "Hello"+name
+
 @app.route("/zh")
 def zh():
-    return "我真的好累~, 你要的我都學不會"+render_template("index.html")
+    return "歡迎~, 光臨"+render_template("index.html")
 
 @app.route("/firstWeb")
 def firstWeb():
@@ -39,7 +44,7 @@ def page():
 def jsonDumps():
     return json.dumps({
         "status":"OK",
-        "text":"dumps dumps"+"我真的好累~"
+        "text":"dumps dumps"+"test"
     }, ensure_ascii=False) #指示不要用ASCII 編碼處理中文
 
 #建立路徑 /data 對應的處理函式
@@ -52,11 +57,11 @@ def getData():
 def getUser(name):
     return "Hello "+name
 
-@app.route("/getSum")
-def getSum(): #sum of m to n
-    maxNumber=request.args.get("n", 100)
+@app.route("/calculate")
+def calculate(): #sum of m to n
+    maxNumber=request.args.get("max", 100)
     maxNumber=int(maxNumber)
-    minNumber=request.args.get("m", 1)
+    minNumber=request.args.get("min", 1)
     minNumber=int(minNumber)
     result=0
 
@@ -69,7 +74,8 @@ def getSum(): #sum of m to n
     m=minNumber # 最小值 m
     m=m-1 # 為了減去m(最小值)以下的所有等差級數之合 m本身是需要的值
     result = int((n+1)*n/2-(m+1)*m/2)
-    return "結果："+str(result)
+    #return f"從{minNumber}開始到{maxNumber}之等差級數之合：{result}"
+    return render_template("result.html", data=result)
 
 
 

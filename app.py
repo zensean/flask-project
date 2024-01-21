@@ -2,10 +2,11 @@ from flask import Flask     # 載入 Flask
 from flask import request   # 載入 Request 物件
 from flask import redirect  # 載入 Redirect 函式
 from flask import render_template # 載入 render_template 函式
+from flask import session   # 載入 session 使用者狀態管理
 import json
 # 建立 Application 物件, 設定靜態檔案的資料夾名稱及路徑, 設定為預設值
 app=Flask(__name__, static_folder="static", static_url_path="/static") 
-
+app.secret_key="55688"
 #建立路徑 / 對應的處理函式
 @app.route("/")
 def index(): # 用來回應路徑 / 的處理函式
@@ -23,10 +24,18 @@ def index(): # 用來回應路徑 / 的處理函式
     else:
         return "<h2>hello</h2>"+ render_template("home.html")
 
-@app.route("/showName")
+@app.route("/showName", methods=["POST"])
 def show():
-    name=request.args.get("n", "")
-    return "Hello"+name
+    #name=request.args.get("n", "")
+    name=request.form["n"]
+    session["username"]=name
+    return render_template("name.html", name=name)
+
+@app.route("/members")
+def members():
+    name=session["username"]
+    return render_template("members.html", userName=name)
+    #return "歡迎"+ name+"進入會員檔案"
 
 @app.route("/zh")
 def zh():
@@ -74,8 +83,8 @@ def calculate(): #sum of m to n
     m=minNumber # 最小值 m
     m=m-1 # 為了減去m(最小值)以下的所有等差級數之合 m本身是需要的值
     result = int((n+1)*n/2-(m+1)*m/2)
-    #return f"從{minNumber}開始到{maxNumber}之等差級數之合：{result}"
-    return render_template("result.html", data=result)
+    return render_template("result.html", min_number=minNumber, max_number=maxNumber, data=result)
+
 
 
 
